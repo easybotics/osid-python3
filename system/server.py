@@ -99,7 +99,13 @@ class SDCardDupe(object):
 
         # Run dd command and output status into the progress.info file
         dd_cmd = "sudo ddfldd bs=1M if=/dev/zero of=" + " of=".join(devices) + " count=1 && "
-        dd_cmd = "sudo dcfldd bs=4M if=" + img_file
+        
+        if( img_file.split('.')[1] == '.zip'):
+            dd_cmd += "unzip -c " +  img_file + "| sudo dcfldd bs=4M "
+        else:
+            dd_cmd += "sudo dcfldd bs=4M if=" + img_file
+            
+        dd_cmd += "sudo dcfldd bs=4M if=" + img_file
         dd_cmd += " of=" + " of=".join(devices)
         dd_cmd += " sizeprobe=if statusinterval=1 2>&1 | sudo tee "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
@@ -210,7 +216,7 @@ class SDCardDupe(object):
         # get the list of images and check if valid img file
         for img_file in os.listdir(config_parse['DuplicatorSettings']['ImagePath']):
             img_fullpath = os.path.join(config_parse['DuplicatorSettings']['ImagePath'], img_file)
-            if os.path.isfile(img_fullpath) and  os.path.splitext(img_file)[1] == '.img':
+            if os.path.isfile(img_fullpath) and  (os.path.splitext(img_file)[1] == '.img' or os.path.splitext(img_file)[1] == '.zip'):
 
                 # get the size of the image
                 img_filesize_cmd = "ls -sh " + img_fullpath
