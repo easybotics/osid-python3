@@ -6,6 +6,7 @@ import configparser
 # Installed Libs
 import cherrypy
 
+done = False
 
 # Todo: too many config_parse blocks, create a function to easily call it
 
@@ -101,6 +102,8 @@ class SDCardDupe(object):
         dd_cmd += " of=" + " of=".join(devices)
         dd_cmd += " sizeprobe=if statusinterval=1 2>&1 | sudo tee "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
+        dd_cmd += " && if /home/pi/osid-python3/system/check.sh " + img_file + ' ' + ' '.join(devices) + '; then echo \"CHECKFAIL\" | sudo tee -a '
+        dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info; fi"
         dd_cmd += " && echo \"osid_completed_task\" | sudo tee -a "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
 
@@ -111,6 +114,7 @@ class SDCardDupe(object):
         with open(dd_cmd_file,'w') as write_file:
             write_file.write(dd_cmd)
 
+        done = False
         subprocess.Popen(['sudo', 'bash', dd_cmd_file], close_fds=True)
 
         hostname_port = config_parse['DuplicatorSettings']['Host']+":"+config_parse['DuplicatorSettings']['SocketPort']
@@ -142,9 +146,13 @@ class SDCardDupe(object):
         # pull data from progress.info file and feed back to call
         cat_cmd = "sudo cat "+ progress_file
         cat_output = str(subprocess.check_output(cat_cmd, shell=True).decode("utf-8"))
+        checkfail = False
         if "records in" in cat_output and "records out" in cat_output and "osid_completed_task" in cat_output:
-            percentage = "100%"
+            if "CHECKFAIL" in cat_output:
+                checkfail = True
+			
             time_remains = "00:00:00"
+            percentage = "100%"
 
         elif "%" in cat_output:
             current_line = cat_output.split("[")[-1]
@@ -153,7 +161,7 @@ class SDCardDupe(object):
 
         # send the data as a json
         cherrypy.response.headers['Content-Type'] = 'application/json'
-        return json.dumps({'percentage':percentage.replace('%',''),'time_remaining':time_remains,'img_name':imgname})
+        return json.dumps({'percentage':percentage.replace('%',''),'time_remaining':time_remains,'img_name':imgname,'checkfail':checkfail})
 
 
     @cherrypy.expose
