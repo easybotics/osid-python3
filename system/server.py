@@ -102,7 +102,7 @@ class SDCardDupe(object):
         dd_cmd += " of=" + " of=".join(devices)
         dd_cmd += " sizeprobe=if statusinterval=1 2>&1 | sudo tee "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
-        dd_cmd += " && if /home/pi/osid-python3/system/check.sh " + img_file + ' ' + ' '.join(devices) + '; then echo \"CHECKFAIL\" | sudo tee -a '
+        dd_cmd += " && if /home/pi/osid-python3/system/check.sh " + 'VERIFY' + ' ' + ' '.join(devices) + '; then echo \"CHECKFAIL\" | sudo tee -a '
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info; fi"
         dd_cmd += " && echo \"osid_completed_task\" | sudo tee -a "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"

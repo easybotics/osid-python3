@@ -1,8 +1,7 @@
 #!/bin/bash
 
-echo $@ > /home/pi/AAAA
 echo "compare file is $1"
-globalHash=$(dd if="$1" | md5sum)
+globalHash=$(cat "$1")
 echo "$globalHash" >> /home/pi/AAAA
 status=1
 
