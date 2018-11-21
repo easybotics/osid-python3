@@ -7,7 +7,7 @@ status=1
 
 function hash()
 {
-	<"$1" head -c "$(stat -c %s $globalHash)" | cmp -s - $globalHash
+	<"$1" head -c "$(stat -c %s $globalHash)" | cmp  - $globalHash
 	return $?
 }
 	
