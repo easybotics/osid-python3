@@ -1,22 +1,14 @@
 #!/bin/bash
 
-echo "compare file is $1"
-globalHash=$(cat "$1")
+globalHash="$1"
 echo "$globalHash" >> /home/pi/AAAA
 status=1
 
 
 function hash()
 {
-	hash=$(dd if=$1 | md5sum)
-	echo "$hash" >> /home/pi/AAAA
-	if [ "$globalHash" == "$hash" ];
-	then
-		return 0;
-	else
-		return 1;
-	fi
-
+	<"$1" head -c "$(stat -c %s $globalHash)" | cmp -s - $globalHash
+	return $?
 }
 	
 
