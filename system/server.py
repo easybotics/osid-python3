@@ -108,9 +108,13 @@ class SDCardDupe(object):
         dd_cmd += " of=" + " of=".join(devices)
         dd_cmd += " sizeprobe=if statusinterval=1 2>&1 | sudo tee "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
-        dd_cmd += " && if /home/pi/osid-python3/system/check.sh " + img_file + ' ' + ' '.join(devices) + '; then echo \"CHECKFAIL\" | sudo tee -a '
-        dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info; fi"
         dd_cmd += " && echo \"osid_completed_task\" | sudo tee -a "
+        dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
+        dd_cmd += " && echo \"running_checksum\" | sudo tee -a "
+        dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
+        dd_cmd += " && if /home/pi/osid-python3/system/check.sh " + img_file + ' ' + ' '.join(devices) + '; then echo \"checksum_failed\" | sudo tee -a '
+        dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info; fi"
+        dd_cmd += " && echo \"checksum_completed_task\" | sudo tee -a "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
 
         # Planned to run this in localhost only.
@@ -152,22 +156,33 @@ class SDCardDupe(object):
         # pull data from progress.info file and feed back to call
         cat_cmd = "sudo cat "+ progress_file
         cat_output = str(subprocess.check_output(cat_cmd, shell=True).decode("utf-8"))
-        checkfail = False
-        if "records in" in cat_output and "records out" in cat_output and "osid_completed_task" in cat_output:
-            if "CHECKFAIL" in cat_output:
-                checkfail = True
-			
-            time_remains = "00:00:00"
-            percentage = "100%"
+        done_writing = False
+        running_checksum = False
+        done_checksum = False
+        checksum_failed = False
 
-        elif "%" in cat_output:
+
+        if "osid_completed_task" in cat_output:
+            done_writing = True
+
+        if "running_checksum" in cat_output:
+            running_checksum = True
+
+        if "checksum_failed" in cat_output:
+            checksum_failed = True
+
+        if "checksum_completed_task" in cat_output:
+            done_checksum = True
+	
+
+        if "%" in cat_output:
             current_line = cat_output.split("[")[-1]
             percentage = current_line.split(" of ")[0]
             time_remains = current_line.split("written. ")[1].split(" remaining.")[0]
 
         # send the data as a json
         cherrypy.response.headers['Content-Type'] = 'application/json'
-        return json.dumps({'percentage':percentage.replace('%',''),'time_remaining':time_remains,'img_name':imgname,'checkfail':checkfail})
+        return json.dumps({'percentage':percentage.replace('%',''),'time_remaining':time_remains,'img_name':imgname, 'done_writing':done_writing, 'running_checksum': running_checksum, 'checksum_failed': checksum_failed, 'done_checksum': done_checksum})
 
 
     @cherrypy.expose

@@ -46,18 +46,28 @@
                             elem.style.width = width + '%';
                             elem.innerHTML = width * 1 + '%';
 
-							if (array.checkfail)
+							if (array.check_running)
 							{
-                                completed_html = "CHECKSUM FAILED: " + array.img_name + "<br>"
-                                completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
+
+                                completed_html = "running check... " + array.img_name + "<br>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
 							}
 
-							else if (width == 100) {
-                                completed_html = "Duplication Complete: " + array.img_name + "<br>"
+							else if (array.check_fail)
+							{
+                                completed_html = "Check FAILED " + array.img_name + "<br>"
                                 completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
-                            } else {
+                            }
+
+							else if (array.done_checksum) 
+							{
+                                completed_html = "Duplication + Check Complete: " + array.img_name + "<br>"
+                                completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
+                                document.getElementById("StatusMessage").innerHTML = completed_html
+                            } 
+							else 
+							{
                                 document.getElementById("StatusMessage").innerHTML = "Time Remaining: " + array.time_remaining
                             }
 
