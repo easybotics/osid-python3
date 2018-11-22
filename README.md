@@ -1,5 +1,7 @@
 # Open Source Image Duplicator - Python3
 
+Forked to add inline zip unpacking, image write verification using cmp, and an annoying beep when done writing. 
+
 OSID offers a UI (in the form of a webpage) wrapper to dcfldd to assist in duplicating SD cards from a Raspberry Pi.
 
 
