@@ -26,10 +26,7 @@
 			snd.play();
 		}
 		
-		function sleep(ms) 
-		{
-			return new Promise(resolve => setTimeout(resolve, ms));
-		}
+
 		
 
 
@@ -64,7 +61,6 @@
                                 completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
                                 beep()
-                                await sleep(1000);
 
                             }
 
@@ -74,7 +70,6 @@
                                 completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
                                 beep()
-                                await sleep(1000);
                             } 
 							else if (array.running_checksum)
 							{
