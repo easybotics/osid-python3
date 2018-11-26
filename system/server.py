@@ -98,12 +98,12 @@ class SDCardDupe(object):
         out.close()
 
         # Run dd command and output status into the progress.info file
-        #dd_cmd = "sudo ddfldd bs=1M if=/dev/zero of=" + " of=".join(devices) + " count=1 && "
+        dd_cmd = "sudo ddfldd bs=1M if=/dev/zero of=" + " of=".join(devices) + " count=1 && "
         
         if( img_file.split('.')[1] == 'zip'):
-            dd_cmd = "unzip -c " +  img_file + "| sudo dcfldd bs=4M "
+            dd_cmd += " unzip -c " +  img_file + "| sudo dcfldd bs=4M "
         else:
-            dd_cmd = "sudo dcfldd bs=4M if=" + img_file
+            dd_cmd += " sudo dcfldd bs=4M if=" + img_file
             
         dd_cmd += " of=" + " of=".join(devices)
         dd_cmd += " sizeprobe=if statusinterval=1 2>&1 | sudo tee "
@@ -112,7 +112,7 @@ class SDCardDupe(object):
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
         dd_cmd += " && echo \"running_checksum\" | sudo tee -a "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
-        dd_cmd += " && if /home/pi/osid-python3/system/check.sh " + img_file + ' ' + ' '.join(devices) + '; then echo \"checksum_failed\" | sudo tee -a '
+        dd_cmd += " && if sudo /home/pi/osid-python3/system/check.sh " + img_file + ' ' + ' '.join(devices) + '; then echo \"checksum_failed\" | sudo tee -a '
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info; fi"
         dd_cmd += " && echo \"checksum_completed_task\" | sudo tee -a "
         dd_cmd += config_parse['DuplicatorSettings']['Logs'] + "/progress.info"
