@@ -98,12 +98,10 @@ class SDCardDupe(object):
         out.close()
 
         # Run dd command and output status into the progress.info file
-        dd_cmd = "sudo ddfldd bs=1M if=/dev/zero of=" + " of=".join(devices) + " count=1 && "
+        dd_cmd = "sudo dcfldd bs=1M if=/dev/zero of=" + " of=".join(devices) + " count=1 && "
         
-        if( img_file.split('.')[1] == 'zip'):
-            dd_cmd += " unzip -c " +  img_file + "| sudo dcfldd bs=4M "
-        else:
-            dd_cmd += " sudo dcfldd bs=4M if=" + img_file
+     
+        dd_cmd += " sudo dcfldd bs=4M if=" + img_file
             
         dd_cmd += " of=" + " of=".join(devices)
         dd_cmd += " sizeprobe=if statusinterval=1 2>&1 | sudo tee "
