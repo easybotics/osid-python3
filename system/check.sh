@@ -1,7 +1,8 @@
 #!/bin/bash
 
+sync
+echo 3 > /proc/sys/vm/drop_caches
 globalHash="$1"
-echo "$globalHash" >> /home/pi/AAAA
 status=1
 
 
@@ -17,6 +18,7 @@ for i in "${@:2}"
 do
 	hash $i
 	if [ $? -ne 0 ]; then 
+		echo "check failed"
 		exit 0
 	fi
 done
