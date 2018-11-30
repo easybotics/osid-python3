@@ -61,6 +61,7 @@
 
 							if (array.check_fail)
 							{
+								console.log("check failed");
                                 completed_html = "Check FAILED " + array.img_name + "<br>"
                                 completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
@@ -70,6 +71,7 @@
 
 							else if (array.done_checksum) 
 							{
+								console.log("done checksum");
                                 completed_html = "Duplication + Check Complete: " + array.img_name + "<br>"
                                 completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
