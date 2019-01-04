@@ -61,7 +61,7 @@
 							if (array.checksum_failed)
 							{
 								console.log("check failed");
-                                completed_html = "Check FAILED " + array.img_name + "<br>"
+                                completed_html = "Check FAILED <h1> rewwrite these images, or be very careful</h1> <br>" + array.img_name + "<br>"
                                 completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
                                 beep()
@@ -70,8 +70,9 @@
 
 							else if (array.done_checksum) 
 							{
+
 								console.log("done checksum");
-                                completed_html = "Duplication + Check Complete: " + array.img_name + "<br>"
+                                completed_html = "<h1>Duplication + Check Complete: " + array.img_name + "</h1><br>"
                                 completed_html += "<a href=\"http://replacewithhostnamehere\">Return to Start</a>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
                                 beep()
@@ -79,7 +80,8 @@
 							else if (array.running_checksum)
 							{
 
-                                completed_html = "running check... " + array.img_name + "<br>"
+								width = 90;
+                                completed_html = "<h1> running check... NOT DONE YET! <br> " + array.img_name + "<h1><br>"
                                 document.getElementById("StatusMessage").innerHTML = completed_html
 							}
 
