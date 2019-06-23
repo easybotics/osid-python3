@@ -57,7 +57,7 @@ class SDCardDupe(object):
 
 
         #clear our log folder
-        subprocess.Popen(['sudo', 'bash', 'rm -r' + config_parse['DuplicatorSettings']['Logs'] + "/*")
+        subprocess.Popen(['sudo', 'bash', 'rm -r' + config_parse['DuplicatorSettings']['Logs'] + "/*"])
 
         # get all mounted items on the rpi
         mounted_list = []
