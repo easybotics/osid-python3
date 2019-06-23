@@ -54,6 +54,11 @@ class SDCardDupe(object):
     @cherrypy.expose
     def posted(self,img_file,devices):
 
+
+
+        #clear our log folder
+        subprocess.Popen(['sudo', 'bash', 'rm -r' + config_parse['DuplicatorSettings']['Logs'] + "/*")
+
         # get all mounted items on the rpi
         mounted_list = []
         mounted_volumes_output = subprocess.check_output("mount", shell=True)
