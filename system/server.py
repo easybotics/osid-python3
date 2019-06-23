@@ -54,6 +54,10 @@ class SDCardDupe(object):
     @cherrypy.expose
     def posted(self,img_file,devices):
 
+   # get host configs from server.ini
+        config_parse = configparser.ConfigParser()
+        config_parse.sections()
+        config_parse.read( os.path.dirname(os.path.realpath(__file__)) + '/server.ini' )
 
 
         #clear our log folder
@@ -89,11 +93,7 @@ class SDCardDupe(object):
             mounted_list.extend(reduced_list)
 
 
-        # get host configs from server.ini
-        config_parse = configparser.ConfigParser()
-        config_parse.sections()
-        config_parse.read( os.path.dirname(os.path.realpath(__file__)) + '/server.ini' )
-
+     
         if not os.path.exists(config_parse['DuplicatorSettings']['Logs']):
             os.makedirs(config_parse['DuplicatorSettings']['Logs'])
 
