@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #first we need to install all the python requirements 
-sudo apt-get -y install python3 python3-pop dcfldd
+sudo apt-get -y install python3 python3-pip dcfldd
 sudo pip3 install -yr requirements.txt
 
 #lets create our ramdisk 
