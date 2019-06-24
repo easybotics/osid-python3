@@ -32,6 +32,8 @@ cherrypy (through pip)
 ### Installation and Deployment
 
 TODO: Just run the setup script
+* we made a setup script now, to use it clone into home and run install.sh *
+* designed to work on a raspberry pi *
 
 ```
 sudo python3 setup.py
