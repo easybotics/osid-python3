@@ -264,7 +264,7 @@ if __name__ == '__main__':
         'global':{
             'server.socket_host': config_parse['DuplicatorSettings']['Host'],
             'server.socket_port': int(config_parse['DuplicatorSettings']['SocketPort']),
-            'log.access_file' : config_parse['DuplicatorSettings']['Logs']+"/access.log",
+            'log.access_file' : "",
             'log.screen': False,
             'tools.sessions.on': True
         }
